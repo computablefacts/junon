@@ -12,9 +12,9 @@ import com.google.errorprone.annotations.CheckReturnValue;
 /**
  * <pre>
  * {
- *     "type": "MD_TYPE_2",
- *     "key": "key2",
- *     "value": "value2"
+ *     "type": "METADATA TYPE",
+ *     "key": "key1",
+ *     "value": "value1"
  * }
  * </pre>
  */
