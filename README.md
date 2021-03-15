@@ -4,6 +4,8 @@
 [![Build Status](https://travis-ci.com/computablefacts/junon.svg?branch=master)](https://travis-ci.com/computablefacts/junon)
 [![codecov](https://codecov.io/gh/computablefacts/junon/branch/master/graph/badge.svg)](https://codecov.io/gh/computablefacts/junon)
 
+Junon is a data transfer object for Java compatible with our platform API.
+
 ## Adding Junon to your build
 
 Junon's Maven group ID is `com.computablefacts` and its artifact ID is `junon`.
