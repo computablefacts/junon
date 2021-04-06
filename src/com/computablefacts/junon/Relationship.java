@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import com.computablefacts.nona.Generated;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

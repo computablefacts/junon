@@ -2,8 +2,6 @@ package com.computablefacts.junon;
 
 import java.time.Instant;
 
-import com.computablefacts.nona.Generated;
-import com.computablefacts.nona.helpers.RandomString;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

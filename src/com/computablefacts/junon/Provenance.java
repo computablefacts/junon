@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import com.computablefacts.nona.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
