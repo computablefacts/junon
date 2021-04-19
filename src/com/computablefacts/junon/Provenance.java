@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.google.errorprone.annotations.CheckReturnValue;
 
@@ -34,6 +35,8 @@ import com.google.errorprone.annotations.CheckReturnValue;
 @CheckReturnValue
 @JsonInclude(JsonInclude.Include.NON_NULL)
 final public class Provenance {
+
+  private final static HashFunction MURMUR3_128 = Hashing.murmur3_128();
 
   @JsonProperty("source_store")
   public final String sourceStore_;
@@ -119,8 +122,7 @@ final public class Provenance {
     sourceReliability_ = sourceReliability;
     string_ = string;
     span_ = span;
-    spanHash_ = Hashing.goodFastHash(128).newHasher().putString(span, StandardCharsets.UTF_8).hash()
-        .toString();
+    spanHash_ = MURMUR3_128.newHasher().putString(span, StandardCharsets.UTF_8).hash().toString();
     startIndex_ = startIndex;
     endIndex_ = endIndex;
     page_ = page;
