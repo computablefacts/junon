@@ -87,13 +87,13 @@ final public class Fact extends HasId {
     String spanHash = (String) provenance.get("string_span_hash");
     int page;
 
-    if (values.size() == 5 /* vam */) {
+    if (values.size() == 5 && sourceStore.contains("/vam/")) {
       try {
         page = Integer.parseInt(values.get(1), 10);
       } catch (NumberFormatException e) {
         page = 0;
       }
-    } else if (values.size() == 3 /* dab */) {
+    } else if (values.size() == 3 && sourceStore.contains("/dab/")) {
       try {
         page = Integer.parseInt(values.get(2), 10);
       } catch (NumberFormatException e) {

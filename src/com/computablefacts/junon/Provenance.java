@@ -38,27 +38,27 @@ final public class Provenance {
   private final static HashFunction MURMUR3_128 = Hashing.murmur3_128();
 
   @JsonProperty("source_store")
-  public final String sourceStore_;
+  private final String sourceStore_;
   @JsonProperty("source_type")
-  public final String sourceType_;
+  private final String sourceType_;
   @JsonProperty("source_reliability")
-  public final String sourceReliability_;
+  private final String sourceReliability_;
   @JsonProperty("string")
-  public final String string_; // full page
+  private final String string_; // full page
   @JsonProperty("string_span")
-  public final String span_; // snippet
+  private final String span_; // snippet
   @JsonProperty("start_index")
-  public final Integer startIndex_; // fact start position in snippet
+  private final Integer startIndex_; // fact start position in snippet
   @JsonProperty("end_index")
-  public final Integer endIndex_; // fact end position in snippet
+  private final Integer endIndex_; // fact end position in snippet
   @JsonProperty("extraction_date")
-  public final String extractionDate_;
+  private final String extractionDate_;
   @JsonProperty("modification_date")
-  public final String modificationDate_;
+  private final String modificationDate_;
   @JsonProperty("string_span_hash")
-  public final String spanHash_; // snippet's hash
+  private final String spanHash_; // snippet's hash
   @JsonProperty("page")
-  public final Integer page_; // page number
+  private final Integer page_; // page number
 
   public Provenance(String sourceType, String sourceStore, String sourceReliability, Date extractionDate,
       Date modificationDate) {
@@ -193,5 +193,49 @@ final public class Provenance {
 
   public String docId() {
     return sourceStore_.substring(sourceStore_.lastIndexOf('/') + 1);
+  }
+
+  public String sourceStore() {
+    return sourceStore_;
+  }
+
+  public String sourceType() {
+    return sourceType_;
+  }
+
+  public String sourceReliability() {
+    return sourceReliability_;
+  }
+
+  public String string() {
+    return string_;
+  }
+
+  public String span() {
+    return span_;
+  }
+
+  public int startIndex() {
+    return startIndex_ == null ? -1 : startIndex_;
+  }
+
+  public int endIndex() {
+    return endIndex_ == null ? -1 : endIndex_;
+  }
+
+  public String extractionDate() {
+    return extractionDate_;
+  }
+
+  public String modificationDate() {
+    return modificationDate_;
+  }
+
+  public String spanHash() {
+    return spanHash_;
+  }
+
+  public int page() {
+    return page_ == null ? -1 : page_;
   }
 }

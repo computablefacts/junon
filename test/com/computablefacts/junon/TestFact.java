@@ -68,15 +68,15 @@ public class TestFact {
     Assert.assertEquals("35594Z", fact.value(1));
     Assert.assertEquals("3", fact.value(2));
 
-    Assert.assertEquals("ACCUMULO/client_prod/dab/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore_);
-    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType_);
-    Assert.assertNull(fact.provenance().sourceReliability_);
-    Assert.assertNull(fact.provenance().string_);
-    Assert.assertEquals("charges ﬁscales", fact.provenance().span_);
-    Assert.assertEquals("46df8445df964303047b8b5089e498d9", fact.provenance().spanHash_);
-    Assert.assertEquals(0, (int) fact.provenance().startIndex_);
-    Assert.assertEquals(15, (int) fact.provenance().endIndex_);
-    Assert.assertEquals(3, (int) fact.provenance().page_);
+    Assert.assertEquals("ACCUMULO/client_prod/dab/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore());
+    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType());
+    Assert.assertNull(fact.provenance().sourceReliability());
+    Assert.assertNull(fact.provenance().string());
+    Assert.assertEquals("charges ﬁscales", fact.provenance().span());
+    Assert.assertEquals("46df8445df964303047b8b5089e498d9", fact.provenance().spanHash());
+    Assert.assertEquals(0, fact.provenance().startIndex());
+    Assert.assertEquals(15, fact.provenance().endIndex());
+    Assert.assertEquals(3, fact.provenance().page());
 
     Assert.assertEquals("ExtractionTool", fact.metadata().get(0).type());
     Assert.assertEquals("extracted_by_user_name", fact.metadata().get(0).key());
@@ -128,15 +128,15 @@ public class TestFact {
             "High", new Date(), new Date()));
 
     Assert.assertEquals(1, fact.provenances().size());
-    Assert.assertEquals("ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore_);
-    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType_);
-    Assert.assertEquals("High", fact.provenance().sourceReliability_);
-    Assert.assertNull(fact.provenance().string_);
-    Assert.assertNull(fact.provenance().span_);
-    Assert.assertNull(fact.provenance().spanHash_);
-    Assert.assertNull(fact.provenance().startIndex_);
-    Assert.assertNull(fact.provenance().endIndex_);
-    Assert.assertNull(fact.provenance().page_);
+    Assert.assertEquals("ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore());
+    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType());
+    Assert.assertEquals("High", fact.provenance().sourceReliability());
+    Assert.assertNull(fact.provenance().string());
+    Assert.assertNull(fact.provenance().span());
+    Assert.assertNull(fact.provenance().spanHash());
+    Assert.assertEquals(-1, fact.provenance().startIndex());
+    Assert.assertEquals(-1, fact.provenance().endIndex());
+    Assert.assertEquals(-1, fact.provenance().page());
   }
 
   @Test
@@ -184,14 +184,14 @@ public class TestFact {
             "High", new Date(), new Date()));
 
     Assert.assertEquals(1, fact.provenances().size());
-    Assert.assertEquals("ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore_);
-    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType_);
-    Assert.assertEquals("High", fact.provenance().sourceReliability_);
-    Assert.assertNull(fact.provenance().string_);
-    Assert.assertNull(fact.provenance().span_);
-    Assert.assertNull(fact.provenance().spanHash_);
-    Assert.assertNull(fact.provenance().startIndex_);
-    Assert.assertNull(fact.provenance().endIndex_);
-    Assert.assertNull(fact.provenance().page_);
+    Assert.assertEquals("ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore());
+    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType());
+    Assert.assertEquals("High", fact.provenance().sourceReliability());
+    Assert.assertNull(fact.provenance().string());
+    Assert.assertNull(fact.provenance().span());
+    Assert.assertNull(fact.provenance().spanHash());
+    Assert.assertEquals(-1, fact.provenance().startIndex());
+    Assert.assertEquals(-1, fact.provenance().endIndex());
+    Assert.assertEquals(-1, fact.provenance().page());
   }
 }
