@@ -1,18 +1,18 @@
 package com.computablefacts.junon;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.TimeZone;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.errorprone.annotations.CheckReturnValue;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.TimeZone;
 
 /**
  * <pre>
@@ -65,8 +65,8 @@ final public class Relationship extends HasId {
     this(type, confidenceScore, fromId, toId, null, new Date(), null, true);
   }
 
-  public Relationship(String type, double confidenceScore, int fromId, int toId,
-      String authorizations, Date startDate, Date endDate, boolean isValid) {
+  public Relationship(String type, double confidenceScore, int fromId, int toId, String authorizations, Date startDate,
+      Date endDate, boolean isValid) {
 
     this(type, confidenceScore, authorizations, startDate, endDate, isValid);
 
@@ -81,20 +81,17 @@ final public class Relationship extends HasId {
     this(type, confidenceScore, fromId, toId, null, new Date(), null, true);
   }
 
-  public Relationship(String type, double confidenceScore, String fromId, String toId,
-      String authorizations) {
+  public Relationship(String type, double confidenceScore, String fromId, String toId, String authorizations) {
     this(type, confidenceScore, fromId, toId, authorizations, new Date(), null, true);
   }
 
-  public Relationship(String type, double confidenceScore, String fromId, String toId,
-      String authorizations, Date startDate, Date endDate, boolean isValid) {
+  public Relationship(String type, double confidenceScore, String fromId, String toId, String authorizations,
+      Date startDate, Date endDate, boolean isValid) {
 
     this(type, confidenceScore, authorizations, startDate, endDate, isValid);
 
-    Preconditions.checkArgument(!Strings.isNullOrEmpty(fromId),
-        "fromId should neither be null nor empty");
-    Preconditions.checkArgument(!Strings.isNullOrEmpty(toId),
-        "toId should neither be null nor empty");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(fromId), "fromId should neither be null nor empty");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(toId), "toId should neither be null nor empty");
 
     fromExternalId_ = fromId;
     toExternalId_ = toId;
@@ -104,13 +101,12 @@ final public class Relationship extends HasId {
     this(type, confidenceScore, null, new Date(), null, true);
   }
 
-  public Relationship(String type, double confidenceScore, String authorizations, Date startDate,
-      Date endDate, boolean isValid) {
+  public Relationship(String type, double confidenceScore, String authorizations, Date startDate, Date endDate,
+      boolean isValid) {
 
     super();
 
-    Preconditions.checkArgument(!Strings.isNullOrEmpty(type),
-        "type should neither be null nor empty");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(type), "type should neither be null nor empty");
     Preconditions.checkArgument(confidenceScore >= 0.0 && confidenceScore <= 1.0,
         "confidenceScore should neither be >= 0 and <= 1");
 
@@ -125,6 +121,32 @@ final public class Relationship extends HasId {
     isValid_ = isValid;
   }
 
+  @JsonCreator
+  public Relationship(@JsonProperty("external_id") String externalId, @JsonProperty("is_valid") boolean isValid,
+      @JsonProperty("authorizations") String authorizations, @JsonProperty("confidence_score") double confidenceScore,
+      @JsonProperty("type") String type, @JsonProperty("start_date") String startDate,
+      @JsonProperty("end_date") String endDate, @JsonProperty("metadata") List<Metadata> metadata,
+      @JsonProperty("provenances") List<Provenance> provenances, @JsonProperty("from_id") int fromId,
+      @JsonProperty("to_id") int toId) {
+
+    super(externalId);
+
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(type), "type should neither be null nor empty");
+    Preconditions.checkArgument(confidenceScore >= 0.0 && confidenceScore <= 1.0,
+        "confidenceScore should neither be >= 0 and <= 1");
+
+    isValid_ = isValid;
+    authorizations_ = authorizations;
+    confidenceScore_ = confidenceScore;
+    type_ = type;
+    startDate_ = startDate;
+    endDate_ = endDate;
+    metadata_.addAll(metadata);
+    provenances_.addAll(provenances);
+    fromId_ = fromId;
+    toId_ = toId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == this) {
@@ -134,19 +156,17 @@ final public class Relationship extends HasId {
       return false;
     }
     Relationship fact = (Relationship) o;
-    return Objects.equals(type_, fact.type_) && Objects.equals(isValid_, fact.isValid_)
-        && Objects.equals(authorizations_, fact.authorizations_)
-        && Objects.equals(confidenceScore_, fact.confidenceScore_)
-        && Objects.equals(fromId_, fact.fromId_) && Objects.equals(toId_, fact.toId_)
-        && Objects.equals(startDate_, fact.startDate_) && Objects.equals(endDate_, fact.endDate_)
-        && Objects.equals(metadata_, fact.metadata_)
+    return Objects.equals(type_, fact.type_) && Objects.equals(isValid_, fact.isValid_) && Objects.equals(
+        authorizations_, fact.authorizations_) && Objects.equals(confidenceScore_, fact.confidenceScore_)
+        && Objects.equals(fromId_, fact.fromId_) && Objects.equals(toId_, fact.toId_) && Objects.equals(startDate_,
+        fact.startDate_) && Objects.equals(endDate_, fact.endDate_) && Objects.equals(metadata_, fact.metadata_)
         && Objects.equals(provenances_, fact.provenances_);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type_, isValid_, authorizations_, confidenceScore_, fromId_, toId_,
-        startDate_, endDate_, metadata_, provenances_);
+    return Objects.hash(type_, isValid_, authorizations_, confidenceScore_, fromId_, toId_, startDate_, endDate_,
+        metadata_, provenances_);
   }
 
   public void metadata(Metadata metadata) {

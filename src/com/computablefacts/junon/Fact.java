@@ -1,18 +1,20 @@
 package com.computablefacts.junon;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.TimeZone;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.errorprone.annotations.CheckReturnValue;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 /**
  * <pre>
@@ -30,7 +32,6 @@ import com.google.errorprone.annotations.CheckReturnValue;
  * }
  * </pre>
  */
-@Generated
 @CheckReturnValue
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 final public class Fact extends HasId {
@@ -54,6 +55,77 @@ final public class Fact extends HasId {
   @JsonProperty("end_date")
   public final String endDate_;
 
+  @Deprecated
+  @SuppressWarnings("unchecked")
+  public static Fact fromLegacy(Map<String, Object> obj) {
+
+    Integer id = (Integer) obj.get("id");
+    String type = (String) obj.get("type");
+    List<String> values = (List<String>) obj.get("values");
+    Boolean isValid = (Boolean) obj.get("is_valid");
+    Double confidenceScore = (Double) obj.get("confidence_score");
+    String externalId = (String) obj.get("external_id");
+    String startDate = (String) obj.get("start_date");
+    String endDate = (String) obj.get("end_date");
+    String updatedAt = (String) obj.get("updated_at");
+    List<Map<String, Object>> metadata = (List<Map<String, Object>>) obj.get("metadata");
+    List<Map<String, Object>> provenances = (List<Map<String, Object>>) obj.get("provenances");
+
+    Preconditions.checkState(provenances.size() == 1);
+
+    Map<String, Object> provenance = provenances.get(0);
+    String sourceStore = (String) provenance.get("source_store");
+    String sourceType = (String) provenance.get("source_type");
+    String sourceReliability = null;
+    String string = null;
+    String span = (String) provenance.get("string_span");
+    Integer startIndex = (Integer) provenance.get("start_index");
+    Integer endIndex = (Integer) provenance.get("end_index");
+    String extractionDate = null;
+    String modificationDate = null;
+    String spanHash = (String) provenance.get("string_span_hash");
+    int page;
+
+    if (values.size() == 5 /* vam */) {
+      try {
+        page = Integer.parseInt(values.get(1), 10);
+      } catch (NumberFormatException e) {
+        page = 0;
+      }
+    } else if (values.size() == 3 /* dab */) {
+      try {
+        page = Integer.parseInt(values.get(2), 10);
+      } catch (NumberFormatException e) {
+        page = 0;
+      }
+    } else {
+      page = 0;
+    }
+
+    if (page <= 0) {
+      return null; // pages are 1-based
+    }
+
+    // Extract metadata
+    List<Metadata> newMetadata = metadata.stream()
+        .map(m -> new Metadata((String) m.get("type"), (String) m.get("key"), (String) m.get("value")))
+        .collect(Collectors.toList());
+
+    // Extract provenance
+    Provenance newProvenance = new Provenance(sourceStore, sourceType, sourceReliability, string, span, startIndex,
+        endIndex, extractionDate, modificationDate, spanHash, page);
+
+    List<Provenance> newProvenances = new ArrayList<>();
+    newProvenances.add(newProvenance);
+
+    // Create fact
+    Fact fact = new Fact(externalId, newMetadata, newProvenances, values, type, isValid, null, confidenceScore,
+        startDate, endDate);
+    fact.id_ = id;
+
+    return fact;
+  }
+
   public Fact(String type, double confidenceScore) {
     this(type, confidenceScore, null, new Date(), null, null);
   }
@@ -62,15 +134,14 @@ final public class Fact extends HasId {
     this(type, confidenceScore, authorizations, new Date(), null, null);
   }
 
-  public Fact(String type, double confidenceScore, String authorizations, Date startDate,
-      Date endDate, Boolean isValid) {
+  public Fact(String type, double confidenceScore, String authorizations, Date startDate, Date endDate,
+      Boolean isValid) {
 
     super();
 
-    Preconditions.checkArgument(!Strings.isNullOrEmpty(type),
-        "type should neither be null nor empty");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(type), "type should neither be null nor empty");
     Preconditions.checkArgument(confidenceScore >= 0.0 && confidenceScore <= 1.0,
-        "confidenceScore should neither be >= 0 and <= 1");
+        "confidenceScore should be >= 0 and <= 1");
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -83,6 +154,30 @@ final public class Fact extends HasId {
     isValid_ = isValid;
   }
 
+  @JsonCreator
+  public Fact(@JsonProperty("external_id") String externalId, @JsonProperty("metadata") List<Metadata> metadata,
+      @JsonProperty("provenances") List<Provenance> provenances, @JsonProperty("values") List<String> values,
+      @JsonProperty("type") String type, @JsonProperty("is_valid") Boolean isValid,
+      @JsonProperty("authorizations") String authorizations, @JsonProperty("confidence_score") double confidenceScore,
+      @JsonProperty("start_date") String startDate, @JsonProperty("end_date") String endDate) {
+
+    super(externalId);
+
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(type), "type should neither be null nor empty");
+    Preconditions.checkArgument(confidenceScore >= 0.0 && confidenceScore <= 1.0,
+        "confidenceScore should be >= 0 and <= 1");
+
+    metadata_.addAll(metadata);
+    provenances_.addAll(provenances);
+    values_.addAll(values);
+    type_ = type;
+    isValid_ = isValid;
+    authorizations_ = authorizations;
+    confidenceScore_ = confidenceScore;
+    startDate_ = startDate;
+    endDate_ = endDate;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == this) {
@@ -92,18 +187,17 @@ final public class Fact extends HasId {
       return false;
     }
     Fact fact = (Fact) o;
-    return Objects.equals(type_, fact.type_) && Objects.equals(isValid_, fact.isValid_)
-        && Objects.equals(authorizations_, fact.authorizations_)
-        && Objects.equals(confidenceScore_, fact.confidenceScore_)
-        && Objects.equals(startDate_, fact.startDate_) && Objects.equals(endDate_, fact.endDate_)
-        && Objects.equals(metadata_, fact.metadata_)
-        && Objects.equals(provenances_, fact.provenances_) && Objects.equals(values_, fact.values_);
+    return Objects.equals(type_, fact.type_) && Objects.equals(isValid_, fact.isValid_) && Objects.equals(
+        authorizations_, fact.authorizations_) && Objects.equals(confidenceScore_, fact.confidenceScore_)
+        && Objects.equals(startDate_, fact.startDate_) && Objects.equals(endDate_, fact.endDate_) && Objects.equals(
+        metadata_, fact.metadata_) && Objects.equals(provenances_, fact.provenances_) && Objects.equals(values_,
+        fact.values_);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type_, isValid_, authorizations_, confidenceScore_, startDate_, endDate_,
-        metadata_, provenances_, values_);
+    return Objects.hash(type_, isValid_, authorizations_, confidenceScore_, startDate_, endDate_, metadata_,
+        provenances_, values_);
   }
 
   public void value(String value) {
