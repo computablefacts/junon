@@ -70,4 +70,17 @@ public class TestProvenance {
     Assert.assertTrue(provenance.modificationDate_.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z$"));
     Assert.assertEquals(1, (int) provenance.page_);
   }
+
+  @Test
+  public void testAccessors() {
+
+    Provenance provenance = new Provenance("STORAGE/ROOT/DATASET/DOC_ID",
+        "ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z", "High", new Date(), new Date(), 1,
+        "A single page.", "single", 0, "single".length());
+
+    Assert.assertEquals("ACCUMULO", provenance.storage());
+    Assert.assertEquals("client_prod", provenance.root());
+    Assert.assertEquals("example", provenance.dataset());
+    Assert.assertEquals("gcqcl|2021-01-27T23:23:45.006Z", provenance.docId());
+  }
 }

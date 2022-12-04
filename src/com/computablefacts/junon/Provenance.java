@@ -175,4 +175,23 @@ final public class Provenance {
     return Objects.hash(sourceStore_, sourceType_, sourceReliability_, extractionDate_, modificationDate_, string_,
         span_, spanHash_, startIndex_, endIndex_, page_);
   }
+
+  public String storage() {
+    return sourceStore_.substring(0, sourceStore_.indexOf('/'));
+  }
+
+  public String root() {
+    int idx = sourceStore_.indexOf('/') + 1;
+    return sourceStore_.substring(idx, sourceStore_.indexOf('/', idx));
+  }
+
+  public String dataset() {
+    int idx1 = sourceStore_.indexOf('/') + 1;
+    int idx2 = sourceStore_.indexOf('/', idx1) + 1;
+    return sourceStore_.substring(idx2, sourceStore_.lastIndexOf('/'));
+  }
+
+  public String docId() {
+    return sourceStore_.substring(sourceStore_.lastIndexOf('/') + 1);
+  }
 }
