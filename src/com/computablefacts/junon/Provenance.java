@@ -1,11 +1,6 @@
 package com.computablefacts.junon;
 
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
-import java.util.TimeZone;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
@@ -13,6 +8,11 @@ import com.google.common.base.Strings;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.google.errorprone.annotations.CheckReturnValue;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
+import java.util.TimeZone;
 
 /**
  * <pre>
@@ -31,7 +31,6 @@ import com.google.errorprone.annotations.CheckReturnValue;
  * }
  * </pre>
  */
-@Generated
 @CheckReturnValue
 @JsonInclude(JsonInclude.Include.NON_NULL)
 final public class Provenance {
@@ -61,8 +60,8 @@ final public class Provenance {
   @JsonProperty("page")
   public final Integer page_; // page number
 
-  public Provenance(String sourceType, String sourceStore, String sourceReliability,
-      Date extractionDate, Date modificationDate) {
+  public Provenance(String sourceType, String sourceStore, String sourceReliability, Date extractionDate,
+      Date modificationDate) {
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -80,12 +79,11 @@ final public class Provenance {
     modificationDate_ = modificationDate == null ? null : sdf.format(modificationDate);
   }
 
-  public Provenance(String sourceType, String sourceStore, String sourceReliability,
-      Date extractionDate, Date modificationDate, int page, String string) {
+  public Provenance(String sourceType, String sourceStore, String sourceReliability, Date extractionDate,
+      Date modificationDate, int page, String string) {
 
     Preconditions.checkArgument(page > 0, "page number should be > 0");
-    Preconditions.checkArgument(!Strings.isNullOrEmpty(string),
-        "string should neither be null nor empty");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(string), "string should neither be null nor empty");
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -103,13 +101,11 @@ final public class Provenance {
     modificationDate_ = modificationDate == null ? null : sdf.format(modificationDate);
   }
 
-  public Provenance(String sourceType, String sourceStore, String sourceReliability,
-      Date extractionDate, Date modificationDate, int page, String string, String span,
-      int startIndex, int endIndex) {
+  public Provenance(String sourceType, String sourceStore, String sourceReliability, Date extractionDate,
+      Date modificationDate, int page, String string, String span, int startIndex, int endIndex) {
 
     Preconditions.checkArgument(page >= 0, "page number should be >= 0");
-    Preconditions.checkArgument(!Strings.isNullOrEmpty(span),
-        "span should neither be null nor empty");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(span), "span should neither be null nor empty");
     Preconditions.checkArgument(startIndex >= 0 && startIndex <= span.length());
     Preconditions.checkArgument(endIndex >= 0 && endIndex <= span.length());
     Preconditions.checkArgument(startIndex <= endIndex);
@@ -130,6 +126,33 @@ final public class Provenance {
     modificationDate_ = modificationDate == null ? null : sdf.format(modificationDate);
   }
 
+  @JsonCreator
+  public Provenance(@JsonProperty("source_store") String sourceStore, @JsonProperty("source_type") String sourceType,
+      @JsonProperty("source_reliability") String sourceReliability, @JsonProperty("string") String string,
+      @JsonProperty("string_span") String span, @JsonProperty("start_index") Integer startIndex,
+      @JsonProperty("end_index") Integer endIndex, @JsonProperty("extraction_date") String extractionDate,
+      @JsonProperty("modification_date") String modificationDate, @JsonProperty("string_span_hash") String spanHash,
+      @JsonProperty("page") Integer page) {
+
+    Preconditions.checkArgument(page >= 0, "page number should be >= 0");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(span), "span should neither be null nor empty");
+    Preconditions.checkArgument(startIndex >= 0 && startIndex <= span.length());
+    Preconditions.checkArgument(endIndex >= 0 && endIndex <= span.length());
+    Preconditions.checkArgument(startIndex <= endIndex);
+
+    sourceStore_ = sourceStore;
+    sourceType_ = sourceType;
+    sourceReliability_ = sourceReliability;
+    string_ = string;
+    span_ = span;
+    startIndex_ = startIndex;
+    endIndex_ = endIndex;
+    extractionDate_ = extractionDate;
+    modificationDate_ = modificationDate;
+    spanHash_ = spanHash;
+    page_ = page;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == this) {
@@ -139,21 +162,17 @@ final public class Provenance {
       return false;
     }
     Provenance provenance = (Provenance) o;
-    return Objects.equals(sourceStore_, provenance.sourceStore_)
-        && Objects.equals(sourceType_, provenance.sourceType_)
-        && Objects.equals(sourceReliability_, provenance.sourceReliability_)
-        && Objects.equals(extractionDate_, provenance.extractionDate_)
-        && Objects.equals(modificationDate_, provenance.modificationDate_)
-        && Objects.equals(string_, provenance.string_) && Objects.equals(span_, provenance.span_)
-        && Objects.equals(spanHash_, provenance.spanHash_)
-        && Objects.equals(startIndex_, provenance.startIndex_)
-        && Objects.equals(endIndex_, provenance.endIndex_)
-        && Objects.equals(page_, provenance.page_);
+    return Objects.equals(sourceStore_, provenance.sourceStore_) && Objects.equals(sourceType_, provenance.sourceType_)
+        && Objects.equals(sourceReliability_, provenance.sourceReliability_) && Objects.equals(extractionDate_,
+        provenance.extractionDate_) && Objects.equals(modificationDate_, provenance.modificationDate_)
+        && Objects.equals(string_, provenance.string_) && Objects.equals(span_, provenance.span_) && Objects.equals(
+        spanHash_, provenance.spanHash_) && Objects.equals(startIndex_, provenance.startIndex_) && Objects.equals(
+        endIndex_, provenance.endIndex_) && Objects.equals(page_, provenance.page_);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sourceStore_, sourceType_, sourceReliability_, extractionDate_,
-        modificationDate_, string_, span_, spanHash_, startIndex_, endIndex_, page_);
+    return Objects.hash(sourceStore_, sourceType_, sourceReliability_, extractionDate_, modificationDate_, string_,
+        span_, spanHash_, startIndex_, endIndex_, page_);
   }
 }
