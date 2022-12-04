@@ -1,7 +1,6 @@
 package com.computablefacts.junon;
 
 import java.security.SecureRandom;
-
 import org.junit.Assert;
 import org.junit.Test;
 
