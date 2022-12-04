@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CheckReturnValue;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,23 +38,23 @@ import java.util.stream.Collectors;
 final public class Fact extends HasId {
 
   @JsonProperty("metadata")
-  public final List<Metadata> metadata_ = new ArrayList<>();
+  private final List<Metadata> metadata_ = new ArrayList<>();
   @JsonProperty("provenances")
-  public final List<Provenance> provenances_ = new ArrayList<>();
+  private final List<Provenance> provenances_ = new ArrayList<>();
   @JsonProperty("values")
-  public final List<String> values_ = new ArrayList<>();
+  private final List<String> values_ = new ArrayList<>();
   @JsonProperty("type")
-  public final String type_;
+  private final String type_;
   @JsonProperty("is_valid")
-  public final Boolean isValid_;
+  private final Boolean isValid_;
   @JsonProperty("authorizations")
-  public final String authorizations_;
+  private final String authorizations_;
   @JsonProperty("confidence_score")
-  public final double confidenceScore_;
+  private final double confidenceScore_;
   @JsonProperty("start_date")
-  public final String startDate_;
+  private final String startDate_;
   @JsonProperty("end_date")
-  public final String endDate_;
+  private final String endDate_;
 
   @Deprecated
   @SuppressWarnings("unchecked")
@@ -207,6 +208,17 @@ final public class Fact extends HasId {
     values_.add(value);
   }
 
+  public String value(int position) {
+
+    Preconditions.checkArgument(0 <= position && position < values_.size());
+
+    return values_.get(position);
+  }
+
+  public List<String> values() {
+    return ImmutableList.copyOf(values_);
+  }
+
   public void metadata(Collection<Metadata> metadata) {
 
     Preconditions.checkNotNull(metadata);
@@ -221,10 +233,76 @@ final public class Fact extends HasId {
     this.metadata_.add(metadata);
   }
 
+  public List<Metadata> metadata() {
+    return ImmutableList.copyOf(metadata_);
+  }
+
   public void provenance(Provenance provenance) {
 
     Preconditions.checkNotNull(provenance);
 
     provenances_.add(provenance);
+  }
+
+  public Provenance provenance() {
+
+    Preconditions.checkState(provenances_.size() == 1);
+
+    return provenances_.get(0);
+  }
+
+  public List<Provenance> provenances() {
+    return ImmutableList.copyOf(provenances_);
+  }
+
+  public String type() {
+    return type_;
+  }
+
+  public Boolean isValid() {
+    return isValid_;
+  }
+
+  /**
+   * Returns true iif the fact has been accepted.
+   *
+   * @return true if the fact has been accepted, false otherwise.
+   */
+  public boolean isAccepted() {
+    return isValid_ != null && isValid_;
+  }
+
+  /**
+   * Returns true iif the fact has been rejected.
+   *
+   * @return true if the fact has been rejected, false otherwise.
+   */
+  public boolean isRejected() {
+    return isValid_ != null && !isValid_;
+  }
+
+  /**
+   * Returns true iif the fact should be verified.
+   *
+   * @return true if the fact should be verified, false otherwise.
+   */
+  public boolean isVerified() {
+    return isValid_ != null;
+  }
+
+  public String authorizations() {
+    return authorizations_;
+  }
+
+  public double confidenceScore() {
+    return confidenceScore_;
+  }
+
+  public String startDate() {
+    return startDate_;
+  }
+
+  public String endDate() {
+    return endDate_;
   }
 }

@@ -50,35 +50,37 @@ public class TestFact {
     Assert.assertNotNull(fact);
     Assert.assertEquals(706396, fact.id_);
     Assert.assertEquals("PizD9|2021-11-22T08:41:24.096Z", fact.externalId_);
-    Assert.assertEquals("evenements_garantis_degats_eaux_limites_v2", fact.type_);
-    Assert.assertNull(fact.authorizations_);
-    Assert.assertFalse(fact.isValid_);
-    Assert.assertEquals(0.71073985303466, fact.confidenceScore_, 0.0000000001);
-    Assert.assertEquals("2021-11-22T08:41:24Z", fact.startDate_);
-    Assert.assertEquals("2021-11-22T08:41:40Z", fact.endDate_);
+    Assert.assertEquals("evenements_garantis_degats_eaux_limites_v2", fact.type());
+    Assert.assertNull(fact.authorizations());
+    Assert.assertFalse(fact.isValid());
+    Assert.assertFalse(fact.isAccepted());
+    Assert.assertTrue(fact.isRejected());
+    Assert.assertTrue(fact.isVerified());
+    Assert.assertEquals(0.71073985303466, fact.confidenceScore(), 0.0000000001);
+    Assert.assertEquals("2021-11-22T08:41:24Z", fact.startDate());
+    Assert.assertEquals("2021-11-22T08:41:40Z", fact.endDate());
 
-    Assert.assertEquals(3, fact.values_.size());
-    Assert.assertEquals(1, fact.provenances_.size());
-    Assert.assertEquals(5, fact.metadata_.size());
+    Assert.assertEquals(3, fact.values().size());
+    Assert.assertEquals(1, fact.provenances().size());
+    Assert.assertEquals(5, fact.metadata().size());
 
-    Assert.assertEquals("3032-0006", fact.values_.get(0));
-    Assert.assertEquals("35594Z", fact.values_.get(1));
-    Assert.assertEquals("3", fact.values_.get(2));
+    Assert.assertEquals("3032-0006", fact.value(0));
+    Assert.assertEquals("35594Z", fact.value(1));
+    Assert.assertEquals("3", fact.value(2));
 
-    Assert.assertEquals("ACCUMULO/client_prod/dab/gcqcl|2021-01-27T23:23:45.006Z",
-        fact.provenances_.get(0).sourceStore_);
-    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenances_.get(0).sourceType_);
-    Assert.assertNull(fact.provenances_.get(0).sourceReliability_);
-    Assert.assertNull(fact.provenances_.get(0).string_);
-    Assert.assertEquals("charges ﬁscales", fact.provenances_.get(0).span_);
-    Assert.assertEquals("46df8445df964303047b8b5089e498d9", fact.provenances_.get(0).spanHash_);
-    Assert.assertEquals(0, (int) fact.provenances_.get(0).startIndex_);
-    Assert.assertEquals(15, (int) fact.provenances_.get(0).endIndex_);
-    Assert.assertEquals(3, (int) fact.provenances_.get(0).page_);
+    Assert.assertEquals("ACCUMULO/client_prod/dab/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore_);
+    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType_);
+    Assert.assertNull(fact.provenance().sourceReliability_);
+    Assert.assertNull(fact.provenance().string_);
+    Assert.assertEquals("charges ﬁscales", fact.provenance().span_);
+    Assert.assertEquals("46df8445df964303047b8b5089e498d9", fact.provenance().spanHash_);
+    Assert.assertEquals(0, (int) fact.provenance().startIndex_);
+    Assert.assertEquals(15, (int) fact.provenance().endIndex_);
+    Assert.assertEquals(3, (int) fact.provenance().page_);
 
-    Assert.assertEquals("ExtractionTool", fact.metadata_.get(0).type());
-    Assert.assertEquals("extracted_by_user_name", fact.metadata_.get(0).key());
-    Assert.assertEquals("John DOE", fact.metadata_.get(0).value());
+    Assert.assertEquals("ExtractionTool", fact.metadata().get(0).type());
+    Assert.assertEquals("extracted_by_user_name", fact.metadata().get(0).key());
+    Assert.assertEquals("John DOE", fact.metadata().get(0).value());
   }
 
   @Test
@@ -89,50 +91,52 @@ public class TestFact {
     Assert.assertNotNull(fact);
     Assert.assertEquals(0, fact.id_);
     Assert.assertTrue(fact.externalId_.matches("^[a-zA-Z0-9]{5}\\|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z$"));
-    Assert.assertEquals("evenements_garantis_degats_eaux_limites_v2", fact.type_);
-    Assert.assertNull(fact.authorizations_);
-    Assert.assertNull(fact.isValid_);
-    Assert.assertEquals(0.5, fact.confidenceScore_, 0.0000000001);
-    Assert.assertTrue(fact.startDate_.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z$"));
-    Assert.assertNull(fact.endDate_);
+    Assert.assertEquals("evenements_garantis_degats_eaux_limites_v2", fact.type());
+    Assert.assertNull(fact.authorizations());
+    Assert.assertNull(fact.isValid());
+    Assert.assertFalse(fact.isAccepted());
+    Assert.assertFalse(fact.isRejected());
+    Assert.assertFalse(fact.isVerified());
+    Assert.assertEquals(0.5, fact.confidenceScore(), 0.0000000001);
+    Assert.assertTrue(fact.startDate().matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z$"));
+    Assert.assertNull(fact.endDate());
 
-    Assert.assertEquals(0, fact.values_.size());
-    Assert.assertEquals(0, fact.provenances_.size());
-    Assert.assertEquals(0, fact.metadata_.size());
+    Assert.assertEquals(0, fact.values().size());
+    Assert.assertEquals(0, fact.provenances().size());
+    Assert.assertEquals(0, fact.metadata().size());
 
     fact.value("123");
     fact.value("456");
 
-    Assert.assertEquals(2, fact.values_.size());
-    Assert.assertEquals("123", fact.values_.get(0));
-    Assert.assertEquals("456", fact.values_.get(1));
+    Assert.assertEquals(2, fact.values().size());
+    Assert.assertEquals("123", fact.value(0));
+    Assert.assertEquals("456", fact.value(1));
 
     fact.metadata(Lists.newArrayList(new Metadata("info", "author", "patrick")));
     fact.metadata(new Metadata("info", "date", "2020-03-17"));
 
-    Assert.assertEquals(2, fact.metadata_.size());
-    Assert.assertEquals("info", fact.metadata_.get(0).type());
-    Assert.assertEquals("author", fact.metadata_.get(0).key());
-    Assert.assertEquals("patrick", fact.metadata_.get(0).value());
-    Assert.assertEquals("info", fact.metadata_.get(1).type());
-    Assert.assertEquals("date", fact.metadata_.get(1).key());
-    Assert.assertEquals("2020-03-17", fact.metadata_.get(1).value());
+    Assert.assertEquals(2, fact.metadata().size());
+    Assert.assertEquals("info", fact.metadata().get(0).type());
+    Assert.assertEquals("author", fact.metadata().get(0).key());
+    Assert.assertEquals("patrick", fact.metadata().get(0).value());
+    Assert.assertEquals("info", fact.metadata().get(1).type());
+    Assert.assertEquals("date", fact.metadata().get(1).key());
+    Assert.assertEquals("2020-03-17", fact.metadata().get(1).value());
 
     fact.provenance(
         new Provenance("STORAGE/ROOT/DATASET/DOC_ID", "ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z",
             "High", new Date(), new Date()));
 
-    Assert.assertEquals(1, fact.provenances_.size());
-    Assert.assertEquals("ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z",
-        fact.provenances_.get(0).sourceStore_);
-    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenances_.get(0).sourceType_);
-    Assert.assertEquals("High", fact.provenances_.get(0).sourceReliability_);
-    Assert.assertNull(fact.provenances_.get(0).string_);
-    Assert.assertNull(fact.provenances_.get(0).span_);
-    Assert.assertNull(fact.provenances_.get(0).spanHash_);
-    Assert.assertNull(fact.provenances_.get(0).startIndex_);
-    Assert.assertNull(fact.provenances_.get(0).endIndex_);
-    Assert.assertNull(fact.provenances_.get(0).page_);
+    Assert.assertEquals(1, fact.provenances().size());
+    Assert.assertEquals("ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore_);
+    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType_);
+    Assert.assertEquals("High", fact.provenance().sourceReliability_);
+    Assert.assertNull(fact.provenance().string_);
+    Assert.assertNull(fact.provenance().span_);
+    Assert.assertNull(fact.provenance().spanHash_);
+    Assert.assertNull(fact.provenance().startIndex_);
+    Assert.assertNull(fact.provenance().endIndex_);
+    Assert.assertNull(fact.provenance().page_);
   }
 
   @Test
@@ -143,49 +147,51 @@ public class TestFact {
     Assert.assertNotNull(fact);
     Assert.assertEquals(0, fact.id_);
     Assert.assertTrue(fact.externalId_.matches("^[a-zA-Z0-9]{5}\\|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z$"));
-    Assert.assertEquals("evenements_garantis_degats_eaux_limites_v2", fact.type_);
-    Assert.assertEquals("JOB_123", fact.authorizations_);
-    Assert.assertNull(fact.isValid_);
-    Assert.assertEquals(0.5, fact.confidenceScore_, 0.0000000001);
-    Assert.assertTrue(fact.startDate_.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z$"));
-    Assert.assertNull(fact.endDate_);
+    Assert.assertEquals("evenements_garantis_degats_eaux_limites_v2", fact.type());
+    Assert.assertEquals("JOB_123", fact.authorizations());
+    Assert.assertNull(fact.isValid());
+    Assert.assertFalse(fact.isAccepted());
+    Assert.assertFalse(fact.isRejected());
+    Assert.assertFalse(fact.isVerified());
+    Assert.assertEquals(0.5, fact.confidenceScore(), 0.0000000001);
+    Assert.assertTrue(fact.startDate().matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z$"));
+    Assert.assertNull(fact.endDate());
 
-    Assert.assertEquals(0, fact.values_.size());
-    Assert.assertEquals(0, fact.provenances_.size());
-    Assert.assertEquals(0, fact.metadata_.size());
+    Assert.assertEquals(0, fact.values().size());
+    Assert.assertEquals(0, fact.provenances().size());
+    Assert.assertEquals(0, fact.metadata().size());
 
     fact.value("123");
     fact.value("456");
 
-    Assert.assertEquals(2, fact.values_.size());
-    Assert.assertEquals("123", fact.values_.get(0));
-    Assert.assertEquals("456", fact.values_.get(1));
+    Assert.assertEquals(2, fact.values().size());
+    Assert.assertEquals("123", fact.value(0));
+    Assert.assertEquals("456", fact.value(1));
 
     fact.metadata(Lists.newArrayList(new Metadata("info", "author", "patrick")));
     fact.metadata(new Metadata("info", "date", "2020-03-17"));
 
-    Assert.assertEquals(2, fact.metadata_.size());
-    Assert.assertEquals("info", fact.metadata_.get(0).type());
-    Assert.assertEquals("author", fact.metadata_.get(0).key());
-    Assert.assertEquals("patrick", fact.metadata_.get(0).value());
-    Assert.assertEquals("info", fact.metadata_.get(1).type());
-    Assert.assertEquals("date", fact.metadata_.get(1).key());
-    Assert.assertEquals("2020-03-17", fact.metadata_.get(1).value());
+    Assert.assertEquals(2, fact.metadata().size());
+    Assert.assertEquals("info", fact.metadata().get(0).type());
+    Assert.assertEquals("author", fact.metadata().get(0).key());
+    Assert.assertEquals("patrick", fact.metadata().get(0).value());
+    Assert.assertEquals("info", fact.metadata().get(1).type());
+    Assert.assertEquals("date", fact.metadata().get(1).key());
+    Assert.assertEquals("2020-03-17", fact.metadata().get(1).value());
 
     fact.provenance(
         new Provenance("STORAGE/ROOT/DATASET/DOC_ID", "ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z",
             "High", new Date(), new Date()));
 
-    Assert.assertEquals(1, fact.provenances_.size());
-    Assert.assertEquals("ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z",
-        fact.provenances_.get(0).sourceStore_);
-    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenances_.get(0).sourceType_);
-    Assert.assertEquals("High", fact.provenances_.get(0).sourceReliability_);
-    Assert.assertNull(fact.provenances_.get(0).string_);
-    Assert.assertNull(fact.provenances_.get(0).span_);
-    Assert.assertNull(fact.provenances_.get(0).spanHash_);
-    Assert.assertNull(fact.provenances_.get(0).startIndex_);
-    Assert.assertNull(fact.provenances_.get(0).endIndex_);
-    Assert.assertNull(fact.provenances_.get(0).page_);
+    Assert.assertEquals(1, fact.provenances().size());
+    Assert.assertEquals("ACCUMULO/client_prod/example/gcqcl|2021-01-27T23:23:45.006Z", fact.provenance().sourceStore_);
+    Assert.assertEquals("STORAGE/ROOT/DATASET/DOC_ID", fact.provenance().sourceType_);
+    Assert.assertEquals("High", fact.provenance().sourceReliability_);
+    Assert.assertNull(fact.provenance().string_);
+    Assert.assertNull(fact.provenance().span_);
+    Assert.assertNull(fact.provenance().spanHash_);
+    Assert.assertNull(fact.provenance().startIndex_);
+    Assert.assertNull(fact.provenance().endIndex_);
+    Assert.assertNull(fact.provenance().page_);
   }
 }
